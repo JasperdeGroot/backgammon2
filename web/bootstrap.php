@@ -34,7 +34,7 @@ $app->post('/register', function (Request $request) use ($app) {
     $register->user($request->get('email'), $request->get('alias'));
     
     // indien geslaagd redirect naar lobby 
-    return $app->redirect('/lobby/' . $request->get('email'));
+    return $app->redirect('/lobby/' . $request->get('alias'));
 });
 
 $app->get('/lobby/{name}', function (Request $request, $name) use ($app){

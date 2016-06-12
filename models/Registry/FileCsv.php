@@ -14,8 +14,6 @@ class FileCsv implements IRegistry {
     const COLUM_ALIAS = 1;
     const COLUM_REGISTER_DATETIME = 2;
     
-    
-    
     protected $filepath; 
 
     public function __construct($filePath) {
