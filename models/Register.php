@@ -8,6 +8,8 @@ use Model\Registry\IRegistry;
  * @author tomtom
  */
 class Register {
+    
+    
 
     protected $username;
     protected $registry;
@@ -16,8 +18,8 @@ class Register {
         $this->registry = $registry;
     }
     
-    public function user($email, $alias){
-        $this->registry->insert(array($email, $alias, IRegistry::DATETIME_FORMAT) );
+    public function user($email, $alias, $password){
+        $this->registry->insert(array($email, $alias, sha1($password), date(IRegistry::DATETIME_FORMAT) ) );
     }
     
     public function findByEmail($email){

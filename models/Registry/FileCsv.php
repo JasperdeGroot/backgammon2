@@ -47,7 +47,7 @@ class FileCsv implements IRegistry {
         // Lees het hele bestand behalve de regel die je niet wil in een nieuw array
         foreach ($content as $line){
             if($line[$key] != $value){
-                $newContent[] = $line;
+                $newContent[] = $line . PHP_EOL;
             }
         }
         // Schrijf het nieuwe array weg.
@@ -62,7 +62,7 @@ class FileCsv implements IRegistry {
     
     public function insert($row) {
         $addHandle = fopen($this->filepath, 'a');
-        fwrite($addHandle, implode(',', $row));
+        fwrite($addHandle, implode(',', $row) . PHP_EOL);
         fclose($addHandle);
         return $this;
     }
