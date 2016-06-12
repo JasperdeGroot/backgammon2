@@ -38,8 +38,11 @@ $app->post('/register', function (Request $request) use ($app) {
 });
 
 $app->get('/lobby/{name}', function (Request $request, $name) use ($app){
+    $register = new Model\Register(new Model\Registry\FileCsv(__DIR__ .'/../data/users.csv'));
     return $app['twig']->render('lobby.twig', array(
-        'name' => $name
+        'name' => $name,
+        'list' => $register->listUsers()
+        
     ));
 });
 

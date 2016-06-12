@@ -8,8 +8,6 @@ use Model\Registry\IRegistry;
  * @author tomtom
  */
 class Register {
-    
-    
 
     protected $username;
     protected $registry;
@@ -26,9 +24,11 @@ class Register {
         return $this->registry->get(0, $email);
     }
     
-    
     public function listUsers(){
-        $date = date(IRegistry::DATETIME_FORMAT, time() - (120 *60 ) );
+        $date = new \DateTime();
+        // Alleen de gebruikers die het laatste uur hebben geregistreerd
+        $date->sub(new \DateInterval('P1D'));
         $content = $this->registry->getAllAfter( $date );
+        return $content;
     }
 }

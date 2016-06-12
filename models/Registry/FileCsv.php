@@ -12,7 +12,8 @@ class FileCsv implements IRegistry {
     
     const COLUM_EMAIL = 0;
     const COLUM_ALIAS = 1;
-    const COLUM_REGISTER_DATETIME = 2;
+    const COLUM_PASSWORD = 2;
+    const COLUM_REGISTER_DATETIME = 3;
     
     protected $filepath; 
 
@@ -27,9 +28,9 @@ class FileCsv implements IRegistry {
     }
 
     public function get($primaryKey, $value){
-        $this->validateKey($key);
+        $this->validateKey($primaryKey);
         $readHandle = fopen($this->filepath, 'r');
-        $content = fgetcsv($readHandle, ',', 1000);
+        $content = fgetcsv($readHandle, 1000,',');
         foreach ($content as $line){
             if($line[$primaryKey] == $value){
                 fclose($readHandle);
@@ -41,15 +42,16 @@ class FileCsv implements IRegistry {
     }
     
     public function delete($primaryKey, $value) {
-        $this->validateKey($key);
+        $this->validateKey($primaryKey);
         $readHandle = fopen($this->filepath, 'r');
         $content = fgetcsv($readHandle, ',', 1000);
         // Lees het hele bestand behalve de regel die je niet wil in een nieuw array
         foreach ($content as $line){
-            if($line[$key] != $value){
+            if($line[$primaryKey] != $value){
                 $newContent[] = $line . PHP_EOL;
             }
         }
+        fclose($readHandle);
         // Schrijf het nieuwe array weg.
         // Dit heeft wel als risico dat als er iemand tussen door
         // ook iets aan het doen is, dat deze insert worden overschreven.
@@ -58,6 +60,7 @@ class FileCsv implements IRegistry {
         foreach($newContent as $newLine){
             fwrite($writeHandel, $newContent);
         }
+        fclose($writeHandel);
     }
     
     public function insert($row) {
@@ -70,7 +73,7 @@ class FileCsv implements IRegistry {
     public function update($primaryKey, $primaryValue, $updatedValue) {
         $row = $this->get($primaryKey, $primaryValue);
         $readHandle = fopen($this->filepath, 'r');
-        $content = fgetcsv($readHandle, ',', 1000);
+        $content = fgetcsv($readHandle, 1000, ',');
         foreach ($content as $line){
             if($line == $row){
                 fclose($readHandle);
@@ -80,17 +83,16 @@ class FileCsv implements IRegistry {
         fclose($readHandle);        
     }
     
-    public function getAllAfter($dateTime){
-        $readHandle = fopen($this->filepath, 'r');
-        $content = fgetcsv($readHandle, ',', 1000);
-        $allBefore = array();
+    public function getAllAfter(\DateTime $dateTime){
+        $content = array_map('str_getcsv', file($this->filepath));
+        $allAfter = array();
         foreach ($content as $line){
-            if($line[self::COLUM_REGISTER_DATETIME] > $dateTime){
-                $allBefore[] = $line;
+            $registered = \DateTime::createFromFormat(IRegistry::DATETIME_FORMAT, $line[self::COLUM_REGISTER_DATETIME]);
+            if($registered > $dateTime){
+                $allAfter[] = $line;
             }
         }
-        fclose($readHandle);
-        return $allBefore;
+        return $allAfter;
     }
     
     

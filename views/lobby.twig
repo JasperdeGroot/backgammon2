@@ -1,24 +1,22 @@
 {% include 'header.twig' %}
   <body>
     <div class="container">      
-        <h1>Hello, {{ name }}</h1>
+        <h1>Hallo, {{ name }}</h1>
         <p>In de hal kan je wachten tot er iemand anders is om mee te spelen</p>
         <p>Klik op een naam om samen naar het speel veld te gaan</p>
         <table class="table table-hover">
           <thead>
             <tr>
-              <th>Email</th>
-              <th>alias</th>
+              <th>Alias</th>
               <th>Registered</th>
             </tr>
           </thead>
           <tbody>
               {% if list is defined %}
-              {% for line in list%}
+              {% for line in list %}
             <tr>
-              <td>{{ line[0] }}</td>
-              <td>{{ line[1] }}</td>
-              <td>{{ line[2] }}</td>
+              <td>{{ line.1 }}</td>
+              <td>{{ line.3 }}</td>
             </tr>
               {% endfor %}
               {% endif %}
