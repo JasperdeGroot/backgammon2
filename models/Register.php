@@ -27,7 +27,7 @@ class Register {
     public function listUsers(){
         $date = new \DateTime();
         // Alleen de gebruikers die het laatste uur hebben geregistreerd
-        $date->sub(new \DateInterval('P1D'));
+        $date->sub(new \DateInterval('PT1H'));
         $content = $this->registry->getAllAfter( $date );
         return $content;
     }

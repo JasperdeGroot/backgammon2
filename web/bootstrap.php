@@ -31,13 +31,18 @@ $app->get('/register', function (Request $request) use ($app) {
 
 $app->post('/register', function (Request $request) use ($app) {
     $register = new Model\Register(new Model\Registry\FileCsv(__DIR__ .'/../data/users.csv'));
-    $register->user(
+    try {
+        $register->user(
             $request->get('email'), 
             $request->get('alias'),
-            $register->get('password'));
-    
+            $request->get('password'));
     // indien geslaagd redirect naar lobby 
     return $app->redirect('/lobby/' . $request->get('alias'));
+    } catch (Exception $e){
+        // niet geslaagd probeer het opnieuw
+        // TODO een fout melding op de pagina weergeven
+        return $app->redirect('/register/');
+    }
 });
 
 $app->get('/lobby/{name}', function (Request $request, $name) use ($app){
