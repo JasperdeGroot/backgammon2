@@ -1,5 +1,8 @@
 ### Log files ##
-logs/*
+/logs/*
+
+### data files ###
+*.csv
 
 ### NetBeans ###
 nbproject/private/
