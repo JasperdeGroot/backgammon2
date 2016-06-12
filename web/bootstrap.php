@@ -31,7 +31,10 @@ $app->get('/register', function (Request $request) use ($app) {
 
 $app->post('/register', function (Request $request) use ($app) {
     $register = new Model\Register(new Model\Registry\FileCsv(__DIR__ .'/../data/users.csv'));
-    $register->user($request->get('email'), $request->get('alias'));
+    $register->user(
+            $request->get('email'), 
+            $request->get('alias'),
+            $register->get('password'));
     
     // indien geslaagd redirect naar lobby 
     return $app->redirect('/lobby/' . $request->get('alias'));
